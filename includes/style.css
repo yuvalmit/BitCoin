@@ -1,0 +1,16 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+header,section,nav,aside,footer {
+    display:block;
+}
+
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  margin: auto;
+  position: relative;
+  width: 960px;
+}
+
+
