@@ -2,13 +2,16 @@
 
 
 var width = 960;
-var height = 3500;
+var height = 500;
 var pi = Math.PI;
 var timer;
 var items = [];
 var cur_index = 0;
 var max_index = 0;
 var tickTime = 10;
+var ropeX = 120;
+var ropeY = 300;
+
 
 
 var x = d3.scale.linear()
@@ -21,19 +24,19 @@ var svg = d3.select("body").append("svg")
 
 var usdRect = svg.append("rect")
     .attr("class", "usdRect")
-    .attr("x", 100)
-    .attr("y", 100)
-    .attr("height", 30)
+    .attr("x", ropeX)
+    .attr("y", ropeY)
+    .attr("height", 2)
     .attr("width", 650)
-    .attr("fill", "blue");
+    .attr("fill", "white");
 
 var bitRect = svg.append("rect")
     .attr("class", "bitRect")
-    .attr("x", 100)
-    .attr("y", 100)
-    .attr("height", 30)
-    .attr("width", 0)
-    .attr("fill", "green");
+    .attr("x", ropeX)
+    .attr("y", ropeY-5)
+    .attr("height", 15)
+    .attr("width", 3)
+    .attr("fill", "yellow");
 
 var text = svg.append("text")
     .attr("class","text")
@@ -51,17 +54,24 @@ var num = svg.append("text")
 
 var bitImge = svg.append("svg:image")
       .attr("xlink:href", "images/b5.png")
-      .attr("x", "20")
-      .attr("y", "60")
-      .attr("width", "100")
-      .attr("height", "100");
+      .attr("x", 20)
+      .attr("y", 60)
+      .attr("width", "150")
+      .attr("height", "200");
 
 var usdImge = svg.append("svg:image")
       .attr("xlink:href", "images/u5.png")
-      .attr("x", "730")
-      .attr("y", "60")
-      .attr("width", "100")
-      .attr("height", "100");
+      .attr("x", 730)
+      .attr("y", 60)
+      .attr("width", "150")
+      .attr("height", "200");
+
+var ropeImage = svg.append("g")
+      //.attr("class","rope")
+      //.attr(translate,"transform(50,50)")
+      .attr("width",600)
+      .attr("height",20);
+
 
 $.getJSON("usd.json", function(data){
 
@@ -88,7 +98,7 @@ function changeRec()
   bitRect 
     .transition()
     .duration(tickTime)
-    .attr("width", function(){return 5+x(size)});
+    .attr("x", function(){return ropeX+5+x(size)});
     
   text
     .transition()
@@ -100,9 +110,9 @@ function changeRec()
     .duration(tickTime)
     .text(function(){return size});
 
-  var rand_numb = Math.round(Math.random() * (5 - 1))+1;
-  var rand_numu = 6 - rand_numb;
-  if(cur_index % 2 == 0)
+  var rand_numb = Math.round(Math.random() * (3 - 1))+1;
+  var rand_numu = 4 - rand_numb;
+  if(cur_index % 20 == 0)
   { 
     bitImge
       .attr("xlink:href", "images/b"+ rand_numb +".png");

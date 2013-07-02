@@ -6,11 +6,20 @@ header,section,nav,aside,footer {
     display:block;
 }
 
+header {
+
+  background-image: url("../images/head.png");
+  width: 831px;
+  height: 212px;
+  margin-top: 50px;
+}
+
 body {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   margin: auto;
   position: relative;
   width: 960px;
+  background-color: #000;
 }
 
 
