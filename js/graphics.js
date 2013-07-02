@@ -67,7 +67,7 @@ var usdImge = svg.append("svg:image")
       .attr("height", "200");
 
 var ropeImage = svg.append("g")
-      //.attr("class","rope")
+      .attr("class","rope")
       //.attr(translate,"transform(50,50)")
       .attr("width",600)
       .attr("height",20);
