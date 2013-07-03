@@ -19,7 +19,34 @@ body {
   margin: auto;
   position: relative;
   width: 960px;
-  background-color: #000000;
+  background-color: #000;
 }
 
+.rope {
+  width: 700px;
+  height: 3px;
+  position: absolute;
+  background-image: url("../images/rope.png");
+  background-repeat:repeat-x;
+  background-color: #752872;
+}
+
+.axis path, .axis line {
+      fill: none;
+      stroke: #fff;
+      shape-rendering: crispEdges;
+    }
+    circle {
+      fill: #67fb3d;
+      fill-opacity: 0.5;
+    }
+    rec
+    {
+      fill: #67fb3d;
+      fill-opacity: 0.5;
+    }
+    text
+    {
+      fill: #fff;
+    }
 

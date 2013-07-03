@@ -13,22 +13,25 @@ var ropeX = 120;
 var ropeY = 300;
 
 
-
-var x = d3.scale.linear()
+//scale def
+var s = d3.scale.linear()
         .domain([0, 200])
         .range([1, 600]);
-
+//svg
 var svg = d3.select("body").append("svg")
     .attr("width", width)
     .attr("height", height);
+//scale drawing
 
-var usdRect = svg.append("rect")
-    .attr("class", "usdRect")
-    .attr("x", ropeX)
-    .attr("y", ropeY)
-    .attr("height", 2)
-    .attr("width", 650)
-    .attr("fill", "white");
+var axis = d3.svg.axis()
+        .scale(s)
+        .tickSize(14);
+
+var usdRect = svg.append("g")
+      .attr("class", "axis")
+      .attr("transform", "translate(" + ropeX + "," + ropeY + ")")
+      .call(axis);
+
 
 var bitRect = svg.append("rect")
     .attr("class", "bitRect")
@@ -43,6 +46,7 @@ var text = svg.append("text")
     .attr("x", 300)
     .attr("y", 300)
     .attr("font-size", "20px")
+    .attr("fill","white")
     .text("");
 
 var num = svg.append("text")
@@ -50,27 +54,43 @@ var num = svg.append("text")
     .attr("x", 100)
     .attr("y", 50)
     .attr("font-size", "20px")
+    .attr("fill","white")
     .text("");
 
 var bitImge = svg.append("svg:image")
-      .attr("xlink:href", "images/b5.png")
+      .attr("xlink:href", "images/b3.png")
       .attr("x", 20)
       .attr("y", 60)
       .attr("width", "150")
       .attr("height", "200");
 
 var usdImge = svg.append("svg:image")
-      .attr("xlink:href", "images/u5.png")
+      .attr("xlink:href", "images/u3.png")
       .attr("x", 730)
       .attr("y", 60)
       .attr("width", "150")
       .attr("height", "200");
 
-var ropeImage = svg.append("g")
-      .attr("class","rope")
-      //.attr(translate,"transform(50,50)")
-      .attr("width",600)
-      .attr("height",20);
+/*var ropeImage = svg.append("svg:pattern")
+      .attr("id","pat")
+      .attr("x", 0)
+      .attr("y", 0)
+      .attr("width", 20)
+      .attr("height", 15)
+      .append("svg:image")
+      .attr("xlink:href", "images/rope.png")
+      .attr("x", 0)
+      .attr("y", 0)
+      .attr("width", 20)
+      .attr("height", 15);*/
+      
+var ropeRec = svg.append("rect")
+      .attr("x",0)
+      .attr("y",0)
+      .attr("width",700)
+      .attr("height",15)
+      .attr("fill",url("../images/rope.png"))
+      .attr("class","rope");
 
 
 $.getJSON("usd.json", function(data){
@@ -81,12 +101,13 @@ $.getJSON("usd.json", function(data){
   });
 
 })
-.done(function() { init(); })
+.done(function() { init(items.length-1,0); })
 
 
-function init()
+function init(startIndex, stopIndex)
 {
-  max_index = items.length-1;
+  max_index = startIndex;
+  cur_index = stopIndex;
   start();
 
 }
@@ -98,7 +119,7 @@ function changeRec()
   bitRect 
     .transition()
     .duration(tickTime)
-    .attr("x", function(){return ropeX+5+x(size)});
+    .attr("x", function(){return ropeX+5+s(size)});
     
   text
     .transition()
@@ -144,7 +165,13 @@ function stop() {
 };
 
 
+function play(){
+  init(items.length-1,0);
+}
 
+function pause(){
+  clearTimeout(timer);
+}
 
 /*console.log(data);
 for (var i = 0; i < data.length - 1;  i++) 
