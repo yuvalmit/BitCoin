@@ -8,21 +8,26 @@ var timer;
 var items = [];
 var cur_index = 0;
 var max_index = 0;
-var tickTime = 10;
-var ropeX = 120;
+var tickTime = 100;
+var ropeX = 180;
 var ropeY = 300;
+var pauseIndex = 0;
+var lastValue = 0;
+var curValue = 0;
+var bitImgNum = 1;
+var usdImgNum = 1;
+
 
 
 //scale def
 var s = d3.scale.linear()
-        .domain([0, 200])
+        .domain([200, 0])
         .range([1, 600]);
 //svg
 var svg = d3.select("body").append("svg")
     .attr("width", width)
     .attr("height", height);
 //scale drawing
-
 var axis = d3.svg.axis()
         .scale(s)
         .tickSize(14);
@@ -30,67 +35,78 @@ var axis = d3.svg.axis()
 var usdRect = svg.append("g")
       .attr("class", "axis")
       .attr("transform", "translate(" + ropeX + "," + ropeY + ")")
-      .call(axis);
+      .call(axis.ticks(20));
 
 
+// yellow line indicate value
 var bitRect = svg.append("rect")
     .attr("class", "bitRect")
-    .attr("x", ropeX)
+    .attr("x", ropeX-115)
     .attr("y", ropeY-5)
     .attr("height", 15)
     .attr("width", 3)
     .attr("fill", "yellow");
-
+//the text filed of the date
 var text = svg.append("text")
     .attr("class","text")
-    .attr("x", 300)
-    .attr("y", 300)
-    .attr("font-size", "20px")
-    .attr("fill","white")
-    .text("");
-
-var num = svg.append("text")
-    .attr("class","text")
-    .attr("x", 100)
+    .attr("x", 400)
     .attr("y", 50)
     .attr("font-size", "20px")
     .attr("fill","white")
     .text("");
+//the value of the current day
+var num = svg.append("text")
+    .attr("class","text")
+    .attr("x", ropeX)
+    .attr("y", ropeY +70)
+    .attr("font-size", "20px")
+    .attr("fill","white")
+    .text("");
 
+//bitcoin guy
 var bitImge = svg.append("svg:image")
-      .attr("xlink:href", "images/b3.png")
-      .attr("x", 20)
-      .attr("y", 60)
+      .attr("xlink:href", "images/b1.png")
+      .attr("x", ropeX-145)
+      .attr("y", ropeY-195)
       .attr("width", "150")
       .attr("height", "200");
-
+//dollar guy
 var usdImge = svg.append("svg:image")
-      .attr("xlink:href", "images/u3.png")
-      .attr("x", 730)
-      .attr("y", 60)
+      .attr("xlink:href", "images/u1.png")
+      .attr("x", ropeX+600)
+      .attr("y", ropeY-205)
       .attr("width", "150")
       .attr("height", "200");
-
-/*var ropeImage = svg.append("svg:pattern")
+//ptrren of the rope
+var ropeImage = svg.append("svg:pattern")
       .attr("id","pat")
       .attr("x", 0)
       .attr("y", 0)
-      .attr("width", 20)
-      .attr("height", 15)
+      .attr("width", 15)
+      .attr("height", 10)
+      .attr("patternUnits", "userSpaceOnUse")
       .append("svg:image")
       .attr("xlink:href", "images/rope.png")
       .attr("x", 0)
       .attr("y", 0)
-      .attr("width", 20)
-      .attr("height", 15);*/
-      
+      .attr("width", 15)
+      .attr("height", 10);
+//the rope      
 var ropeRec = svg.append("rect")
-      .attr("x",0)
-      .attr("y",0)
-      .attr("width",700)
-      .attr("height",15)
-      .attr("fill",url("../images/rope.png"))
+      .attr("x",ropeX-30)
+      .attr("y",ropeY-80)
+      .attr("width",670)
+      .attr("height",9)
+      .attr("fill","url(#pat)")
       .attr("class","rope");
+
+//star image in the middle of the rope
+var starImg = svg.append("svg:image")
+      .attr("xlink:href", "images/star.png")
+      .attr("x", ropeX+580)
+      .attr("y", ropeY-90)
+      .attr("width", "30")
+      .attr("height", "30");
 
 
 $.getJSON("usd.json", function(data){
@@ -119,7 +135,7 @@ function changeRec()
   bitRect 
     .transition()
     .duration(tickTime)
-    .attr("x", function(){return ropeX+5+s(size)});
+    .attr("x", function(){return ropeX-5+s(size)});
     
   text
     .transition()
@@ -129,18 +145,45 @@ function changeRec()
   num
     .transition()
     .duration(tickTime)
+    .attr("x", function(){return ropeX+5+s(size)})
     .text(function(){return size});
 
-  var rand_numb = Math.round(Math.random() * (3 - 1))+1;
-  var rand_numu = 4 - rand_numb;
-  if(cur_index % 20 == 0)
+  starImg
+    .transition()
+    .duration(tickTime)
+    .attr("x", function(){return ropeX-17+s(size)})
+    .text(function(){return size});
+
+
+  curValue = size;
+
+  if(curValue > lastValue)
+  {
+    if(bitImgNum == 1)
+      bitImgNum = 2;
+    else
+      bitImgNum--;
+
+  }
+  else
+  {
+    if(usdImgNum == 1)
+      usdImgNum = 2;
+    else
+      usdImgNum--;
+  }
+
+  if(cur_index % 2 == 0)
   { 
     bitImge
-      .attr("xlink:href", "images/b"+ rand_numb +".png");
+      .attr("xlink:href", "images/b"+ bitImgNum +".png");
    
     usdImge
-      .attr("xlink:href", "images/u"+ rand_numu +".png");
+      .attr("xlink:href", "images/u"+ usdImgNum +".png");
+
   }
+
+  lastValue = size;
 
 
 }
@@ -166,11 +209,12 @@ function stop() {
 
 
 function play(){
-  init(items.length-1,0);
+  init(items.length-1,pauseIndex);
 }
 
 function pause(){
   clearTimeout(timer);
+  pauseIndex = cur_index;
 }
 
 /*console.log(data);
