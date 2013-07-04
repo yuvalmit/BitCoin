@@ -93,16 +93,16 @@ var ropeImage = svg.append("svg:pattern")
       .attr("height", 10);
 //the rope      
 var ropeRec = svg.append("rect")
-      .attr("x",ropeX-30)
+      .attr("x",ropeX-45)
       .attr("y",ropeY-80)
-      .attr("width",670)
+      .attr("width",690)
       .attr("height",9)
       .attr("fill","url(#pat)")
       .attr("class","rope");
 
 //star image in the middle of the rope
 var starImg = svg.append("svg:image")
-      .attr("xlink:href", "images/star.png")
+      .attr("xlink:href", "images/starwhite.png")
       .attr("x", ropeX+580)
       .attr("y", ropeY-90)
       .attr("width", "30")
